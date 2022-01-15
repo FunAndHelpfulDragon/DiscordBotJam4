@@ -1,0 +1,14 @@
+{
+    "1": {
+        "Name": "Cobblestone",
+        "Description": "The most basic resource in the world, Used for multiple things",
+        "Rarity": 1,
+        "Max": 100
+    },
+    "2": {
+        "Name": "Iron",
+        "Description": "A common resource used in pretty much all recipies, unfortuantly, harder to find than cobblestone",
+        "Rarity": 2,
+        "Max": 8
+    }
+}
