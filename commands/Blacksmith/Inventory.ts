@@ -8,8 +8,41 @@ export default {
 
     slash: true,
 
+    options: [
+        {
+            name: 'user',
+            description: 'The user you want to see the inventory of',
+            type: 'USER',
+        }
+    ],
+
     callback: ({interaction}) => {
-        if (new FileSystem().checkIfSetup(interaction.user.id)) {
+        let user = interaction.options.getUser('user');
+        if (user) {
+            if (new FileSystem().checkIfSetup(user.id)) {
+                let embed = new MessageEmbed()
+                .setColor('RANDOM')
+                .setDescription(`<@${user.id}>'s inventory`)
+                .setTitle('Inventory')
+                
+                let data = new FileSystem().readFile(`./Data/${user.id}.txt`)['Inventory']
+    
+                Object.keys(data).forEach(key => {
+                    embed.addField(
+                        'Item: ' + key,
+                        'Amount: ' + data[key]['Amount'],
+                        false,
+                    )
+                })
+    
+                return embed;
+            } else {
+                interaction.reply({
+                    content: 'The user specified has not used this bot yet!',
+                    ephemeral: true,
+                })
+            }
+        } else if (new FileSystem().checkIfSetup(interaction.user.id)) {
             let embed = new MessageEmbed()
             .setColor('RANDOM')
             .setDescription('Your inventory')
@@ -20,7 +53,7 @@ export default {
             Object.keys(data).forEach(key => {
                 embed.addField(
                     'Item: ' + key,
-                    'Ammount: ' + data[key]['Ammount'],
+                    'Amount: ' + data[key]['Amount'],
                     false,
                 )
             })

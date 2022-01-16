@@ -39,9 +39,9 @@ client.on('ready', async () => {
     })
     .setDefaultPrefix('?')
 
-    await new Promise(resolve => setTimeout(resolve, 1.25 * 1000))
+    await new Promise(resolve => setTimeout(resolve, 1.5 * 1000))
 
-    const messageChannel = client.channels.cache.get('930916536301011005') as TextChannel
+    const messageChannel = client.channels.cache.get('867115458062450779') as TextChannel
     messageChannel.send(`Bot is ready - ${new Intl.DateTimeFormat('en-GB', { "timeStyle": "medium" }).format(new Date)}`)
 })
 

@@ -1,0 +1,41 @@
+{
+    "1": {
+        "Name": "Sword",
+        "Description": "A basic weapon made of iron",
+        "Resources": {
+            "Iron": 3
+        },
+        "Cost": 10,
+        "Time": "0m"
+    },
+    "2": {
+        "Name": "Cobblestone_Stick",
+        "Description": "A very point stick, be careful",
+        "Resources": {
+            "Cobblestone": 1
+        },
+        "Cost": 10,
+        "Time": "0m"
+    },
+    "3": {
+        "Name": "????",
+        "Description": "????",
+        "Resources": {
+            "Cobblestone": 100,
+            "Steel": 1050,
+            "Iron": 40,
+            "Stick": 102
+        },
+        "Cost": 1000000000,
+        "Time": "0m"
+    },
+    "4": {
+        "Name": "Stick",
+        "Description": "Wooden stick used to craft tools, etc.",
+        "Resources": {
+            "Wood": 0.25
+        },
+        "Cost": 4,
+        "Time": "0.5m"
+    }
+}

@@ -7,8 +7,26 @@
     },
     "2": {
         "Name": "Iron",
-        "Description": "A common resource used in pretty much all recipies, unfortuantly, harder to find than cobblestone",
+        "Description": "A common resource used in pretty much all recipes, unfortuantly, harder to find than cobblestone",
         "Rarity": 2,
         "Max": 8
+    },
+    "3": {
+        "Name": "Steel",
+        "Description": "A well used resource in making items, harder to come by though",
+        "Rarity": 5,
+        "Max": 3
+    },
+    "4": {
+        "Name": "???",
+        "Description": "????",
+        "Rarity": 10000,
+        "Max": 1
+    },
+    "5": {
+        "Name": "Wood",
+        "Description": "Find wood in the wild and craft it into wooden stuff.",
+        "Rarity": 2,
+        "Max": 50
     }
 }

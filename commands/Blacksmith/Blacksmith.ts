@@ -2,6 +2,8 @@ import { Client, MessageActionRow, MessageEmbed, MessageSelectMenu } from "disco
 import { ICommand } from "wokcommands";
 import { FileSystem } from '../../FileSystem';
 
+let Amount_G = 1;
+
 export default {
     category: 'Blacksmith',
     description: 'Actually do some blacksmithing, rather than mining all the time',
@@ -16,7 +18,7 @@ export default {
 
             if (interaction.customId == 'Option') {
                 let data = new FileSystem().readFile(`./Data/${interaction.user.id}.txt`);
-                let recipie = new FileSystem().readFile(`./Files/Recipies.json`);
+                let recipe = new FileSystem().readFile(`./Files/recipes.json`);
                 const {customId, values} = interaction;
 
                 let Time = Number.parseInt(interaction.createdTimestamp.toString());
@@ -24,41 +26,52 @@ export default {
                 let oldMsg = Number.parseInt(data.Time);
 
                 if (Cooldown <= (Time - oldMsg)) {
-                    Object.keys(recipie).forEach(key => {
-                        if (recipie[key].Name == values[0]) {
-                            let resources = [recipie[key]['Resources']];
+                    Object.keys(recipe).forEach(key => {
+                        if (recipe[key].Name == values[0]) {
+                            let resources = [recipe[key]['Resources']];
                             console.log(resources[0]);
 
-                            let make = true;
-                            let itemMissing = '';
+                            try {
+                                let make = true;
+                                let itemMissing = '';
 
-                            Object.keys(resources[0]).forEach(key2 => {
-                                let cost = resources[0][key2]
-
-                                if (data.Inventory[key2].Ammount < cost) {
-                                    make = false;
-                                    itemMissing += key2 + ', ';
-                                }
-                            })
-
-                            if (make) {
                                 Object.keys(resources[0]).forEach(key2 => {
-                                    new FileSystem().updateInventory(interaction.user.id, key2, -resources[0][key2]);
-                                })
-                                new FileSystem().updateInventory(interaction.user.id, recipie[key].Name, 1);
-                                new FileSystem().updateData(interaction.user.id, 'Time', interaction.createdTimestamp.toString());
-                                new FileSystem().updateData(interaction.user.id, 'Cooldown', recipie[key].Time);
+                                    let cost = resources[0][key2] * Amount_G;
 
-                                interaction.reply({
-                                    content: 'Made 1 ' + recipie[key].Name,
-                                    components: [],
-                                    embeds: []
+                                    if (data.Inventory[key2].Amount < cost) {
+                                        make = false;
+                                        itemMissing += key2 + ', ';
+                                    }
                                 })
-                            } else {
+
+                                if (make) {
+                                    Object.keys(resources[0]).forEach(key2 => {
+                                        new FileSystem().updateInventory(interaction.user.id, key2, -resources[0][key2] * Amount_G);
+                                    })
+                                    new FileSystem().updateInventory(interaction.user.id, recipe[key].Name, 1 * Amount_G);
+                                    new FileSystem().updateData(interaction.user.id, 'Time', interaction.createdTimestamp.toString());
+                                    new FileSystem().updateData(interaction.user.id, 'Cooldown', recipe[key].Time);
+
+                                    interaction.reply({
+                                        content: `Made ${1 * Amount_G} ${recipe[key].Name}`,
+                                        components: [],
+                                        embeds: [],
+                                        ephemeral: true
+                                    })
+                                } else {
+                                    interaction.reply({
+                                        content: 'You are missing [' + itemMissing + '] to make this item.',
+                                        components: [],
+                                        embeds: [],
+                                        ephemeral: true
+                                    })
+                                }
+                            } catch (_) {
                                 interaction.reply({
-                                    content: 'You are missing -' + itemMissing + '- to make this item.',
+                                    content: 'You are missing some resources to make this item',
                                     components: [],
-                                    embeds: []
+                                    embeds: [],
+                                    ephemeral: true
                                 })
                             }
                         }
@@ -69,35 +82,42 @@ export default {
                         ephemeral: true
                     });
                 }
+            } else if (interaction.customId == 'Ammount') {
+                const {customId, values} = interaction;
+                Amount_G = Number.parseInt(values[0]);
+                interaction.reply({
+                    content: 'Updated items made at once to ' + values[0],
+                    ephemeral: true,
+                })
             }
         })
     },
 
     callback: ({interaction}) => {
         if (new FileSystem().checkIfSetup(interaction.user.id)) {
-            let recipie = new FileSystem().readFile(`./Files/Recipies.json`);
+            let recipe = new FileSystem().readFile(`./Files/recipes.json`);
 
             let embed = new MessageEmbed()
             .setColor('RANDOM')
             .setDescription('Items to craft')
             .setTitle('Blacksmith Table')
         
-            Object.keys(recipie).forEach(key => {
-                let RecipieString: string = '';
+            Object.keys(recipe).forEach(key => {
+                let recipeString: string = '';
 
-                Object.keys(recipie[key]['Resources']).forEach(key2 => {
-                    RecipieString = `${RecipieString}${key2} (x${recipie[key]['Resources'][key2]}), `
+                Object.keys(recipe[key]['Resources']).forEach(key2 => {
+                    recipeString = `${recipeString}${key2} (x${recipe[key]['Resources'][key2]}), `
                 })
                 embed.addField(
-                    recipie[key]['Name'],
-                    'Recipie: ' + RecipieString
+                    recipe[key]['Name'],
+                    'recipe: ' + recipeString
                 )
             })
 
             let options:any[] = []
 
-            Object.keys(recipie).forEach(key => {
-                let item:string = recipie[key]['Name']
+            Object.keys(recipe).forEach(key => {
+                let item:string = recipe[key]['Name']
                 options = options.concat({label: item[0].toUpperCase() + item.substring(1).toLowerCase(), value: item});
             })
 
@@ -107,18 +127,35 @@ export default {
                 .setCustomId('Option')
                 .setPlaceholder('What would you like to make?')
                 .addOptions(options)
-                // .addOptions([
-                //     {
-                //         label: 'Sword',
-                //         value: 'sword'
-                //     }
-                // ])
+            ])
+            let row2 = new MessageActionRow()
+            .addComponents([
+                new MessageSelectMenu()
+                .setCustomId('Ammount')
+                .setPlaceholder('Ammount to make')
+                .setOptions([
+                    {
+                        label: '1',
+                        value: "1"
+                    },
+                    {
+                        label: "10",
+                        value: "10"
+                    },
+                    {
+                        label: "100",
+                        value: "100"
+                    },
+                    {
+                        label: "1000",
+                        value: "1000"
+                    }
+                ])
             ])
 
             interaction.reply({
-                content: 'Test',
                 embeds: [embed],
-                components: [row]
+                components: [row, row2]
             })
         } else {
             interaction.reply({

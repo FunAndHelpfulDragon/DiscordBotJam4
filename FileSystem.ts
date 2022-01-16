@@ -17,12 +17,14 @@ export class FileSystem {
             let obj = {
                 Inventory: {
                     Cobblestone: {
-                        Ammount: 0
+                        Amount: 0
                     },
                     Iron: {
-                        Ammount: 0
+                        Amount: 0
                     }
-                }
+                },
+                Time: "0",
+                Cooldown: "0"
             };
             fs.writeFileSync(`./Data/${userId}.txt`,  JSON.stringify(obj));
             return `<@${userId}>'s data has been setup!`;
@@ -30,16 +32,16 @@ export class FileSystem {
         return `<@${userId}>'s data is already setup!`;
     }
 
-    public updateInventory(userId: string, Item: string, ammount: number) {
+    public updateInventory(userId: string, Item: string, Amount: number) {
         if (!this.checkIfSetup(userId)) {
             return false
         }
         let data = this.readFile(`./Data/${userId}.txt`)
         try {
-            data['Inventory'][Item]['Ammount'] = ammount + data['Inventory'][Item]['Ammount'];
+            data['Inventory'][Item]['Amount'] = Amount + data['Inventory'][Item]['Amount'];
         } catch (_) {
             data['Inventory'][Item] = {
-                Ammount: ammount
+                Amount: Amount
             }
         }
         

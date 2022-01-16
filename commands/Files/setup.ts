@@ -3,7 +3,7 @@ import { FileSystem } from "../../FileSystem";
 
 export default {
     category: 'Files',
-    description: 'Setups data for the server',
+    description: 'Setups data for the user',
 
     guildOnly: true,
     slash: true,

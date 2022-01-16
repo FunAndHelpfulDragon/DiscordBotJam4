@@ -21,10 +21,10 @@ export default {
                     let Chosen: number = Math.floor(Math.random() * resourceNumber) + 1
 
                     if (Chosen == newResource['Rarity']) {
-                        let ammount = Math.floor(Math.random() * newResource['Max']) + 1
+                        let Amount = Math.floor(Math.random() * newResource['Max']) + 1
                         if (Object.keys(mined).length == 0) {
                             mined[newResource['Name']] = {
-                                "Ammount": ammount
+                                "Amount": Amount
                             }
                         }
 
@@ -37,10 +37,10 @@ export default {
                         })
 
                         if (contained) {
-                            mined[newResource.Name].Ammount += ammount;
+                            mined[newResource.Name].Amount += Amount;
                         } else {
                             mined[newResource.Name] = {
-                                "Ammount": ammount
+                                "Amount": Amount
                             }
                         }
                     }
@@ -50,8 +50,8 @@ export default {
             let minedObjects:string = 'You Mined: ';
             
             Object.keys(mined).forEach(key => {
-                minedObjects = minedObjects.concat(`${key} (x${mined[key].Ammount}), `);
-                new FileSystem().updateInventory(interaction.user.id, key, mined[key].Ammount);
+                minedObjects = minedObjects.concat(`${key} (x${mined[key].Amount}), `);
+                new FileSystem().updateInventory(interaction.user.id, key, mined[key].Amount);
             })
 
             return minedObjects;
