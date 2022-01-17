@@ -12,21 +12,39 @@
         "Max": 8
     },
     "3": {
-        "Name": "Steel",
-        "Description": "A well used resource in making items, harder to come by though",
-        "Rarity": 5,
-        "Max": 3
+        "Name": "Coal",
+        "Description": "Used for everything, Unforntually rarer to find...",
+        "Rarity": 4,
+        "Max": 20
     },
     "4": {
-        "Name": "???",
-        "Description": "????",
-        "Rarity": 10000,
-        "Max": 1
+        "Name": "Gold",
+        "Description": "Used for decertaion, increases value of item",
+        "Rarity": 20,
+        "Max": 1 
     },
     "5": {
-        "Name": "Wood",
-        "Description": "Find wood in the wild and craft it into wooden stuff.",
-        "Rarity": 2,
-        "Max": 50
+        "Name": "Diamond",
+        "Description": "Used for decertaion, increases value of item",
+        "Rarirt": 100,
+        "Max": 1
+    },
+    "6": {
+        "Name": "???",
+        "Description": "This is unknow to human kind, no-one will know when this becomes know, for now nothing.",
+        "Rarity": 10000000000,
+        "Max": 1
+    },
+    "7": {
+        "Name": "Platinum",
+        "Description": "Used for decertaion, increases value of item",
+        "Rarity": 50,
+        "Max": 1
+    },
+    "8": {
+        "Name": "Dirt",
+        "Description": "Useless, litterally, there is no use for this yet the most common",
+        "Rarity": 0,
+        "Max": 1000000000000000
     }
 }
