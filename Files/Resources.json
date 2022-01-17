@@ -32,7 +32,7 @@
     "6": {
         "Name": "???",
         "Description": "This is unknow to human kind, no-one will know when this becomes know, for now nothing.",
-        "Rarity": 10000000000,
+        "Rarity": 1000000000000,
         "Max": 1
     },
     "7": {
@@ -44,7 +44,7 @@
     "8": {
         "Name": "Dirt",
         "Description": "Useless, litterally, there is no use for this yet the most common",
-        "Rarity": 0,
-        "Max": 1000000000000000
+        "Rarity": 1,
+        "Max": 1000
     }
 }
