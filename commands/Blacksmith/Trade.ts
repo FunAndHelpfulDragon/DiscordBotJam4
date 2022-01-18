@@ -42,8 +42,6 @@ export default {
 
     guildOnly: true,
     cooldown: "1m",
-    ///trade player:@DiscordBotJam4#1470 item:Cobblestone Amount:1000 wanted_item:Iron wanted_Amount:50 
-    ///trade player:@Dqrkxz#8752 item:Cobblestone ammount:22940 wanted_item:??? wanted_ammount:1 
     callback: ({interaction}) => {
         if (new FileSystem().checkIfSetup(interaction.user.id)) {
 
