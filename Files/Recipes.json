@@ -1,41 +1,96 @@
 {
     "1": {
-        "Name": "Sword",
-        "Description": "A basic weapon made of iron",
+        "Name": "Steel",
+        "Description": "A type of metal used in most items",
         "Resources": {
-            "Iron": 3
+            "Iron": 3,
+            "Coal": 1
         },
-        "Cost": 10,
-        "Time": "0m"
+        "Time": "5m"
     },
     "2": {
-        "Name": "Cobblestone_Stick",
-        "Description": "A very point stick, be careful",
-        "Resources": {
-            "Cobblestone": 1
+        "Name": "Sword",
+        "Description": "A weapon used for fighting",
+        "Possible_Resources": {
+            "Steel": 5,
+            "Iron": 10
         },
-        "Cost": 10,
-        "Time": "0m"
+        "Resources": {
+            "Coal": 2
+        },
+        "Gems": {
+            "Platinum": 1,
+            "Diamond": 1,
+            "Gold": 1
+        },
+        "Time": "60m"
     },
     "3": {
-        "Name": "????",
-        "Description": "????",
+        "Name": "Jewelry",
+        "Description": "Pretty stuff",
         "Resources": {
-            "Cobblestone": 100,
-            "Steel": 1050,
-            "Iron": 40,
-            "Stick": 102
+            "Diamond": 10,
+            "Platinum": 10,
+            "Steel": 10,
+            "Gold": 11,
+            "Coal": 20
         },
-        "Cost": 1000000000,
-        "Time": "0m"
+        "Time": "60m"
     },
     "4": {
-        "Name": "Stick",
-        "Description": "Wooden stick used to craft tools, etc.",
-        "Resources": {
-            "Wood": 0.25
+        "Name": "Armor",
+        "Description": "Protection from attacks",
+        "Possible_Resources": {
+            "Iron": 50,
+            "Steel": 50
         },
-        "Cost": 4,
-        "Time": "0.5m"
+        "Resources": {
+            "Coal": 20
+        },
+        "Gems": {
+            "Gold": 10,
+            "Diamond": 10,
+            "Platinum": 10
+        },
+        "Time": "180m"
+    },
+    "5": {
+        "Name": "Building_Materials",
+        "Description": "Items used for building",
+        "Resources": {
+            "Steel": 5,
+            "Iron": 30,
+            "Coal": 10
+        },
+        "Time": "20m"
+    },
+    "6": {
+        "Name": "????",
+        "Description": "An unkown resource can be used for something unknown? How is this possible??? Very rare this is...",
+        "Resources": {
+            "Coal": 10000,
+            "Diamond": 100,
+            "Gold": 100,
+            "Iron": 1000,
+            "Platinum": 100,
+            "Steel": 100,
+            "???": 10
+        },
+        "Time": "1440m"
+    },
+    "7": {
+        "Name": "Transport",
+        "Descsription": "A bunch of items used for easy transport in an open world game",
+        "Possible_Resources": {
+            "Iron": 50,
+            "Steel": 50
+        },
+        "Resources": {
+            "Coal": 20
+        },
+        "Gems": {
+            "Gold": 2
+        },
+        "Time": "300m"
     }
 }
