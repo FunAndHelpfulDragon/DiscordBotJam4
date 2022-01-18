@@ -28,49 +28,118 @@ export default {
                 if (Cooldown <= (Time - oldMsg)) {
                     Object.keys(recipe).forEach(key => {
                         if (recipe[key].Name == values[0]) {
-                            let resources = [recipe[key]['Resources']];
-                            console.log(resources[0]);
-
+                            let resources = recipe[key]['Resources']; // need
+                            let possible_resource: any, Gems: any;
                             try {
-                                let make = true;
-                                let itemMissing = '';
+                                possible_resource = recipe[key]['Possible_Resources']; // 1 only
+                            } catch (_) {
+                                // no possible resource, all are needed.
+                            }
+                            try {
+                                Gems = recipe[key]['Gems']; // option, can have more than 1
+                            } catch (_) {
+                                // no gems in the build.
+                            }
 
-                                Object.keys(resources[0]).forEach(key2 => {
-                                    let cost = resources[0][key2] * Amount_G;
+                            let Missing = [];
+                            let Make = false;
+                            Object.keys(resources).forEach(resource => {
+                                try {
+                                    let amount = data.Inventory[resource].amount;
+                                    let cost = resources[resource] * Amount_G;
 
-                                    if (data.Inventory[key2].Amount < cost) {
-                                        make = false;
-                                        itemMissing += key2 + ', ';
+                                    let total = amount - cost; // produces total, if `-` missing items
+
+                                    if (total < 0) {
+                                        Missing.push([
+                                            resource,
+                                            Math.abs(total)
+                                        ])
+                                    } else {
+                                        Make = true;
+                                    }
+                                } catch (_) {
+                                    Make = false;
+                                    return;
+                                }
+                            })
+                            let has = null;
+                            if (possible_resource != null) {
+                                Object.keys(possible_resource).forEach(pResouce => {
+                                    // Take first one by default
+                                    try {
+                                        let amount = data.Inventory[pResouce].Amount;
+                                        let cost = possible_resource[pResouce] * Amount_G;
+                                        let total = amount - cost;
+
+                                        if (total >= 0) {
+                                            has = pResouce;
+                                            return;
+                                        }
+                                    } catch (_) {
+                                        has = null;
+                                    }
+                                })   
+                            }
+                            let Gem_Has = null;
+                            if (Gems != null) {
+                                Object.keys(Gems).forEach(gem => {
+                                    console.log(gem);
+                                    // Take first one by default
+                                    try {
+                                        let amount = data.Inventory[gem.toString()].Amount;
+                                        let cost = Gems[gem] * Amount_G;
+                                        let total = amount - cost;
+                                        console.log({amount, cost, total});
+
+                                        if (total >= 0) {
+                                            Gem_Has = gem;
+                                            return;
+                                        }
+                                    } catch (_) {
+                                        Gem_Has = null;
                                     }
                                 })
+                            }
 
-                                if (make) {
-                                    Object.keys(resources[0]).forEach(key2 => {
-                                        new FileSystem().updateInventory(interaction.user.id, key2, -resources[0][key2] * Amount_G);
-                                    })
-                                    new FileSystem().updateInventory(interaction.user.id, recipe[key].Name, 1 * Amount_G);
-                                    new FileSystem().updateData(interaction.user.id, 'Time', interaction.createdTimestamp.toString());
-                                    new FileSystem().updateData(interaction.user.id, 'Cooldown', recipe[key].Time);
-
-                                    interaction.reply({
-                                        content: `Made ${1 * Amount_G} ${recipe[key].Name}`,
-                                        components: [],
-                                        embeds: [],
-                                        ephemeral: true
-                                    })
-                                } else {
-                                    interaction.reply({
-                                        content: 'You are missing [' + itemMissing + '] to make this item.',
-                                        components: [],
-                                        embeds: [],
-                                        ephemeral: true
-                                    })
+                            if (Make) {
+                                // remove item from inventory
+                                let extra = "";
+                                if (has != null) {
+                                    new FileSystem().updateInventory(interaction.user.id, has, -(possible_resource[has] * Amount_G));
+                                    extra = ` - ${has}`;
                                 }
-                            } catch (_) {
+                                console.log(Gem_Has);
+                                if (Gem_Has != null) {
+                                    new FileSystem().updateInventory(interaction.user.id, Gem_Has, -(Gems[Gem_Has] * Amount_G));
+                                    extra += ` with ${Gem_Has} gem.`;
+                                }
+                                console.log(extra);
+                                Object.keys(resources).forEach(key2 => {
+                                    new FileSystem().updateInventory(interaction.user.id, key2, -resources[key2] * Amount_G);
+                                })
+                                new FileSystem().updateInventory(interaction.user.id, recipe[key].Name + extra, 1 * Amount_G);
+                                new FileSystem().updateData(interaction.user.id, 'Time', interaction.createdTimestamp.toString());
+                                new FileSystem().updateData(interaction.user.id, 'Cooldown', recipe[key].Time);
+
                                 interaction.reply({
-                                    content: 'You are missing some resources to make this item',
-                                    components: [],
-                                    embeds: [],
+                                    content: `Made ${1 * Amount_G} ${recipe[key].Name}${extra}`,
+                                    ephemeral: true
+                                })
+
+                            } else if (has) {
+                                interaction.reply({
+                                    content: 'You do not have the needed resources for this item',
+                                    ephemeral: true
+                                });
+                            } else if (Make) {
+                                interaction.reply({
+                                    content: 'You have 1 of the possible resources, not the main resources though',
+                                    ephemeral: true
+                                });
+                            } else {
+                                interaction.reply({
+                                    content: 'You have none of the resources to make this item',
                                     ephemeral: true
                                 })
                             }
@@ -82,7 +151,7 @@ export default {
                         ephemeral: true
                     });
                 }
-            } else if (interaction.customId == 'Ammount') {
+            } else if (interaction.customId == 'amount') {
                 const {customId, values} = interaction;
                 Amount_G = Number.parseInt(values[0]);
                 interaction.reply({
@@ -101,6 +170,7 @@ export default {
             .setColor('RANDOM')
             .setDescription('Items to craft')
             .setTitle('Blacksmith Table')
+            .setFooter('() = ammount required, {} = optional items')
         
             Object.keys(recipe).forEach(key => {
                 let recipeString: string = '';
@@ -108,9 +178,20 @@ export default {
                 Object.keys(recipe[key]['Resources']).forEach(key2 => {
                     recipeString = `${recipeString}${key2} (x${recipe[key]['Resources'][key2]}), `
                 })
+                let addition = "";
+                try {
+                    addition += "{";
+                    Object.keys(recipe[key]['Possible_Resources']).forEach(key3 => {
+                        addition += `${key3} (x${recipe[key]['Possible_Resources'][key3]}), `
+                    })
+                    addition += "}";
+                } catch (e) {
+                    addition = "";
+                    // do nothing, no extra stuff.
+                }
                 embed.addField(
                     recipe[key]['Name'],
-                    'recipe: ' + recipeString
+                    'recipe: ' + recipeString + addition
                 )
             })
 
@@ -131,8 +212,8 @@ export default {
             let row2 = new MessageActionRow()
             .addComponents([
                 new MessageSelectMenu()
-                .setCustomId('Ammount')
-                .setPlaceholder('Ammount to make')
+                .setCustomId('amount')
+                .setPlaceholder('amount to make')
                 .setOptions([
                     {
                         label: '1',
@@ -149,6 +230,10 @@ export default {
                     {
                         label: "1000",
                         value: "1000"
+                    },
+                    {
+                        label: "10000",
+                        value: "10000"
                     }
                 ])
             ])
