@@ -15,14 +15,7 @@ export class FileSystem {
 
         if (!fs.existsSync(`./Data/${userId}.txt`)) {
             let obj = {
-                Inventory: {
-                    Cobblestone: {
-                        Amount: 0
-                    },
-                    Iron: {
-                        Amount: 0
-                    }
-                },
+                Inventory: {},
                 Time: "0",
                 Cooldown: "0"
             };
@@ -49,7 +42,7 @@ export class FileSystem {
         return true;
     }
 
-    public updateData(userId: string, Data: string, NewValue: string) {
+    public updateData(userId: string, Data: string, NewValue: any) {
         if (!this.checkIfSetup(userId)) {
             return false;
         }
@@ -58,6 +51,17 @@ export class FileSystem {
 
         fs.writeFileSync(`./Data/${userId}.txt`, JSON.stringify(data));
         return true;
+    }
+
+    public removeData(userId: string, Data: string) {
+        if (!this.checkIfSetup(userId)) {
+            return false;
+        }
+        let data = this.readFile(`./Data/${userId}.txt`)
+        delete data.Inventory[Data];
+
+        fs.writeFileSync(`./Data/${userId}.txt`, JSON.stringify(data));
+        return 'Removed Data';
     }
 
     public checkIfSetup(userId: string) {
