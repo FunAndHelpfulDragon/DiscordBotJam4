@@ -2,13 +2,7 @@ import DiscordJS, {Intents, TextChannel} from 'discord.js';
 import dotenv from 'dotenv';
 import WOKCommands from 'wokcommands';
 import path from 'path';
-import mongoose from 'mongoose';
-import testSchema from './test-schema';
 
-/*
-Possible to add:
-- Big mine (x100 more than normal mine)
-*/
 dotenv.config()
 
 const client = new DiscordJS.Client({
