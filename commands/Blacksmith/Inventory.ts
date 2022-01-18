@@ -31,7 +31,7 @@ export default {
                     embed.addField(
                         'Item: ' + key,
                         'Amount: ' + data[key]['Amount'],
-                        false,
+                        true,
                     )
                 })
     
@@ -54,7 +54,7 @@ export default {
                 embed.addField(
                     'Item: ' + key,
                     'Amount: ' + data[key]['Amount'],
-                    false,
+                    true,
                 )
             })
 
