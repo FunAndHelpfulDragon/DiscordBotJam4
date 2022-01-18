@@ -19,8 +19,8 @@ client.on('ready', async () => {
     new WOKCommands(client, {
         commandsDir: path.join(__dirname, 'commands'),
         typeScript: true,
-        testServers: ["686177483430952970"],
-        botOwners: ['467718535897022479'],
+        testServers: [],
+        botOwners: [],
         disabledDefaultCommands: [
             'help',
             'command',
@@ -32,11 +32,6 @@ client.on('ready', async () => {
         mongoUri: process.env.MONGO_URI,
     })
     .setDefaultPrefix('?')
-
-    await new Promise(resolve => setTimeout(resolve, 1.5 * 1000))
-
-    const messageChannel = client.channels.cache.get('930916536301011005') as TextChannel
-    messageChannel.send(`Bot is ready - ${new Intl.DateTimeFormat('en-GB', { "timeStyle": "medium" }).format(new Date)}`)
 })
 
 client.login(process.env.TOKEN);
